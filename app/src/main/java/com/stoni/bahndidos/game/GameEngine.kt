@@ -5,6 +5,7 @@ import kotlin.math.min
 
 /**
  * 60fps-oriented update: gravity, jump / double-jump salto, duck, scroll, stub AABB.
+ * Spawn sizes from [Hitboxes] (UEBERGABE / Asset-Pack d2f602d).
  */
 class GameEngine(
     val state: GameState = GameState(),
@@ -117,7 +118,7 @@ class GameEngine(
         state.items.forEach { it.x -= dx }
     }
 
-    /** Minimal stub spawner — one obstacle or item occasionally. */
+    /** Minimal stub spawner — sizes from [Hitboxes] / UEBERGABE. */
     private fun stubSpawn(dt: Float) {
         state.spawnCooldown -= dt
         if (state.spawnCooldown > 0f) return
@@ -127,27 +128,10 @@ class GameEngine(
         val spawnX = 420f + (id % 3) * 40f
         if (id % 3L == 0L) {
             val type = ItemType.entries[(id % ItemType.entries.size).toInt()]
-            state.items.add(
-                Item(
-                    id = id,
-                    type = type,
-                    x = spawnX,
-                    y = if (type == ItemType.WIFI) 120f else 8f,
-                    width = 36f,
-                    height = 36f,
-                ),
-            )
+            state.items.add(Item.spawn(id = id, type = type, x = spawnX))
         } else {
             val type = ObstacleType.entries[(id % ObstacleType.entries.size).toInt()]
-            val (w, h, y) = when (type) {
-                ObstacleType.BENCH -> Triple(64f, 28f, 0f)
-                ObstacleType.BIN -> Triple(32f, 48f, 0f)
-                ObstacleType.PIGEON -> Triple(40f, 28f, 40f)
-                ObstacleType.OPA, ObstacleType.OMA -> Triple(40f, 80f, 0f)
-            }
-            state.obstacles.add(
-                Obstacle(id = id, type = type, x = spawnX, y = y, width = w, height = h),
-            )
+            state.obstacles.add(Obstacle.spawn(id = id, type = type, x = spawnX))
         }
     }
 

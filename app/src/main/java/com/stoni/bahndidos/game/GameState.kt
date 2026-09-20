@@ -3,6 +3,7 @@ package com.stoni.bahndidos.game
 /**
  * Mutable runtime state for Bahndidos play loop.
  * Player is fixed on the left; world scrolls right→left.
+ * Hitbox heights aligned to UEBERGABE (~128h characters).
  */
 enum class JumpPhase {
     GROUNDED,
@@ -36,9 +37,11 @@ data class GameState(
     companion object {
         const val DEFAULT_SCROLL_SPEED = 220f
         const val PLAYER_WORLD_X = 72f
-        const val PLAYER_WIDTH = 48f
-        const val PLAYER_HEIGHT = 72f
-        const val PLAYER_DUCK_HEIGHT = 36f
+        /** bahndidos_scooter.png — UEBERGABE ~128h. */
+        val PLAYER_WIDTH: Float = Hitboxes.PLAYER.width
+        val PLAYER_HEIGHT: Float = Hitboxes.PLAYER.height
+        /** Duck ~50% of standing height at ~128h scale. */
+        const val PLAYER_DUCK_HEIGHT = Hitboxes.PLAYER_DUCK_HEIGHT
         const val GROUND_Y = 0f
         const val MAX_BATTERY = 100f
     }
